@@ -42,8 +42,12 @@ function renderCalendar(){
  $('#app').querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{selectedDate=b.dataset.date;calendarMonth=new Date(Number(selectedDate.slice(0,4)),Number(selectedDate.slice(5,7))-1,1);renderCalendar()});
  $('#calAdd').onclick=()=>openForm('trabajos');
  $('#calAddMaint').onclick=()=>openForm('mantenimientos');
- $('#app').querySelectorAll('[data-edit-kind]').forEach(b=>b.onclick=()=>openForm(b.dataset.editKind,Number(b.dataset.editIndex)));
- $('#app').querySelectorAll('[data-delete-kind]').forEach(b=>b.onclick=()=>del(b.dataset.deleteKind,Number(b.dataset.deleteIndex)));
+ $('#app').onclick=e=>{
+  const eb=e.target.closest('[data-edit-kind]');
+  if(eb){e.preventDefault();const k=eb.getAttribute('data-edit-kind'),i=Number(eb.getAttribute('data-edit-index'));if(Number.isInteger(i)&&db[k]&&db[k][i])openForm(k,i);else alert('No se encuentra esa tarea. Actualiza el calendario e inténtalo de nuevo.');return}
+  const dbtn=e.target.closest('[data-delete-kind]');
+  if(dbtn){e.preventDefault();const k=dbtn.getAttribute('data-delete-kind'),i=Number(dbtn.getAttribute('data-delete-index'));if(Number.isInteger(i)&&db[k]&&db[k][i])del(k,i);else alert('No se encuentra esa tarea. Actualiza el calendario e inténtalo de nuevo.')}
+ };
 }
 
 function list(k){return db[k].slice(-5).reverse().map(x=>'<p><b>'+esc(x.cliente||x.nombre||x.titulo||'Trabajo')+'</b> · '+esc(x.fecha||'Sin fecha')+'</p>').join('')||'<div class="empty">Aún no hay trabajos registrados.</div>'}
