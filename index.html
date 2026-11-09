@@ -6,8 +6,8 @@
 <script>
 const config={trabajos:['cliente','fecha','tipo','direccion','importe','estado','horas','notas'],clientes:['nombre','telefono','email','direccion','notas'],mantenimientos:['cliente','tarea','frecuencia','fecha','importe','estado'],facturas:['cliente','numero','fecha','concepto','importe','estado'],gastos:['concepto','categoria','fecha','importe','tipo','proveedor'],maquinaria:['equipo','marca','coste','mantenimiento','notas'],recordatorios:['titulo','fecha','hora','prioridad','estado']};
 const labels={inicio:'Inicio',trabajos:'Trabajos',clientes:'Clientes',calendario:'Calendario',mantenimientos:'Mantenimientos',facturas:'Facturas y cobros',gastos:'Gastos',maquinaria:'Maquinaria',recordatorios:'Recordatorios',informes:'Informes'};
-let db=JSON.parse(localStorage.getItem('fosky-v1')||'{}');Object.keys(config).forEach(k=>db[k]??=[]);let page='inicio',edit=null,calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),selectedDate=localDate(new Date());
-const $=s=>document.querySelector(s),localDate=d=>{let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day},eur=n=>(Number(n)||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'}),today=new Date().toISOString().slice(0,10);
+let db=JSON.parse(localStorage.getItem('fosky-v1')||'{}');Object.keys(config).forEach(k=>db[k]??=[]);let page='inicio',edit=null,calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),selectedDate;
+const $=s=>document.querySelector(s),localDate=d=>{let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day},eur=n=>(Number(n)||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'}),today=localDate(new Date());selectedDate= today;
 function persist(){localStorage.setItem('fosky-v1',JSON.stringify(db))}
 $('#nav').innerHTML=Object.keys(labels).map(k=>'<button data-page="'+k+'">'+labels[k]+'</button>').join('');
 $('#nav').onclick=e=>{let b=e.target.closest('button');if(b)show(b.dataset.page)};
